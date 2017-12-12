@@ -1,0 +1,58 @@
+language: node_js
+
+node_js:
+- "node"
+
+cache:
+  directories:
+    - node_modules
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.6"
+
+env:
+  global:
+  - ENV=TEST
+  - ADDRESS=0.0.0.0
+  - PORT=10000
+  - DATABASE_URL=postgresql://postgres@localhost/base63
+  - DATABASE_MIGRATIONS_DIR=./migrations
+  - DATABASE_MIGRATIONS_TABLE=migrations_content
+  - PGSSLMODE=require
+  - ORIGIN=null
+  - CLIENTS=null
+  - LOGGLY_TOKEN=null
+  - LOGGLY_SUBDOMAIN=null
+  - ROLLBAR_TOKEN=null
+  - GEMFURY_USER=base63
+  # GEMFURY_API_KEY=???
+  - secure: "Xpb4Jn7/UcMar+CqXgZiwGG3UcDB07Fx7BDe7IAA6wR6cclT+mLQT1XcyA9ipCTbRpkmZ1wYqY5L/iYd2+zdbKmnQtj5/QjuVxHNGrGDrbBkUa9+JASoHrURwrv9ZIvTOT6oUEW6AGMYNauKAp89iWC7VvnigTWovQCievElCu83DnzJlduckQXkDAJ7pnzJjg+igFG8fPnGcZv0/om6i22N+2PVEKkbsgYsZKygj9Rgt0KGAQtVfdRU5gghBtKzi5WgP7MjFJGPNPYbdimvAo2VB6aTn0WU+3tF8sAHn5S62gTRSCOyig7sw5E54/WOhWjOaHZH2dEWBZ0rDUHlCnOVKS/nkjaYssy9KcnBCDI3qcZ7DSah7Ewob7N6yYjT/cwCT57vuzEF2LmYtZ9ECY+uPxh6JYQ/gWi2ksRIv565FGLOwVeDsZZraurimpBUBlcdT6EFuI9AFp0MvGyvRQDOOTQ7itfyVmqbb1v+799zS9xSMQlg8TxqzrXRfbk3Wv7rvjYYzBkX1RCRrsp50fgnMEhIjwFUuoTU4UQI9dU7KZRGgH2YNoPpegEmnmhAcGDnVvq6ei51ecJzRUEbcIJJlD9/+wNQ6TEzXBaI4qaU4qkjVxy9ubd5o5MLHYDkpWVjnKCmKVmMuUSKzlWmpuMe2Wgjji4IkwXE+kkDdVw="
+
+install:
+- npm install --registry=https://npm-proxy.fury.io/${GEMFURY_API_KEY}/${GEMFURY_USER}/ --progress=false
+
+before_script:
+- psql -c 'create database base63;' -U postgres
+
+script:
+- npm run test
+
+after_success:
+- npm run push-coverage-to-codecov
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: $(npm bin)/togemfury --user ${GEMFURY_USER} --api_key ${GEMFURY_API_KEY}
+  on:
+    tags: true
+# - provider: heroku
+#   skip_cleanup: true
+#   app: content-staging-base63
+#   api_key:
+#     secure: "bkrJktWntQN9CX+C1/u3Hbg81EeJ7siSN6qgYC8l92vCe7KiguxpXa8LyYUmw/rtmCOBrYx51QWzBc2ivaDgrfFepjA4cMDgkTGUwCEJOYwos9Dq1S6AlQPiCsPoI/GtLCPbJf7cntf8iqJiMt4GfqUDEfvagCF5qOiphQtjmCY3wrFcDDB1PgbsBTYq596eEgKr1OcLt8965AL6Krad36WcpMRTTtqVujZdFR3U+VCWCfLd6N6NAWWt8+wUkjMmK2qzv8r1QyUDfmlJbhoh9SrTmP7nIjqhGmo0NTM/j4ANOic+17xhY9I93qTjpmiFO9OZcpa24L/928wMKYB0TH7EppRoODWzOd0PNdYtY3b5BWo2Uxt+HJPH9Mh9GL76A/6mlxNUTzKRo3/uiLloIWQLmEpETjbdMwS2YVpNrsBAEjdS1LO1NkesDXqzyxelODxTNn31tbfGvT/HAPq1/GhDy7gJa3MPdEAMaTMqfOM/Ursejx4sSrJDgsXKG0equJOwTrGY55NGkUUABUDJOM4hMkars/9Q88S+wVWUyV6ruWoKfDy/ljhBSBooT0PLI9nfbsAvV452GTMp/xlkoLcZGtsrHph3TWOQnWT8Q1AEpVVx1fweD8epUCv7wyCJ7uKTq6nJODdZm1mVDkwYIkF4ntpw0uKRONvAB8ePN2M="
+#   on:
+#     tags: true
