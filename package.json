@@ -2,7 +2,7 @@
   "name": "@base63/content",
   "version": "0.0.0",
   "description": "The content service.",
-  "author": "Base63 team",
+  "author": "The frontend to the base63.com application - editor, landing pages, about etc",
   "scripts": {
     "build": "tsc",
     "serve-dev": "mkdir -p out && touch out/index.js && (tsc --watch & nodemon out/index.js) | bunyan --output short",
@@ -13,10 +13,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/base63/content.git"
+    "url": "git+https://github.com/base63/base63fe.git"
   },
   "license": "MIT",
-  "homepage": "https://github.com/base63/content#readme",
+  "homepage": "https://github.com/base63/base63fe#readme",
   "filesPack": {
     "out": "e:.",
     "migrations": "c:migrations",
