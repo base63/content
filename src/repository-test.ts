@@ -31,12 +31,9 @@ describe('Repository', () => {
         (conn as knex).destroy();
     });
 
-    afterEach('clear out database', async () => {
-        const theConn = conn as knex;
-        await theConn('identity.session_event').delete();
-        await theConn('identity.session').delete();
-        await theConn('identity.user_event').delete();
-        await theConn('identity.user').delete();
+    afterEach('clear out database', () => {
+        // const theConn = conn as knex;
+        // TODO: delete entities here
     });
 
     it('can be created', () => {
