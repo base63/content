@@ -1,6 +1,6 @@
 {
     "name": "@base63/content",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "The content service.",
     "author": "The frontend to the base63.com application - editor, landing pages, about etc",
     "scripts": {
@@ -29,7 +29,7 @@
         "@base63/common-js": "=1.0.0",
         "@base63/common-server-js": "=1.6.1",
         "@base63/content-sdk-js": "=0.1.1",
-        "@base63/identity-sdk-js": "=0.7.1",
+        "@base63/identity-sdk-js": "=0.7.4",
         "async-middleware": "=1.2.1",
         "compression": "=1.7.1",
         "cookie-parser": "=1.4.3",
@@ -41,7 +41,7 @@
         "uuid": "=3.1.0"
     },
     "devDependencies": {
-        "@base63/togemfury": "=0.1.0",
+        "@base63/togemfury": "=0.1.1",
         "@types/bluebird": "=3.5.18",
         "@types/chai": "=4.0.8",
         "@types/compression": "=0.0.35",
