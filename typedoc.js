@@ -1,5 +1,5 @@
 module.exports = {
-    "name": "base63fe",
+    "name": "content",
     "mode": "modules",
     "module": "common-js",
     "exclude": "**/*-test.ts",

@@ -13,10 +13,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/base63/base63fe.git"
+        "url": "git+https://github.com/base63/content.git"
     },
     "license": "MIT",
-    "homepage": "https://github.com/base63/base63fe#readme",
+    "homepage": "https://github.com/base63/content#readme",
     "filesPack": {
         "out": "e:.",
         "migrations": "c:migrations",
