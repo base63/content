@@ -1,6 +1,6 @@
 {
     "name": "@base63/content",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "The content service.",
     "author": "The frontend to the base63.com application - editor, landing pages, about etc",
     "scripts": {
