@@ -3,12 +3,15 @@ language: node_js
 node_js:
 - "node"
 
+sudo: required
+
 cache:
   directories:
     - node_modules
 
 services:
   - postgresql
+  - docker
 
 addons:
   postgresql: "9.6"
@@ -30,6 +33,9 @@ env:
   - GEMFURY_USER=base63
   # GEMFURY_API_KEY=???
   - secure: "Xpb4Jn7/UcMar+CqXgZiwGG3UcDB07Fx7BDe7IAA6wR6cclT+mLQT1XcyA9ipCTbRpkmZ1wYqY5L/iYd2+zdbKmnQtj5/QjuVxHNGrGDrbBkUa9+JASoHrURwrv9ZIvTOT6oUEW6AGMYNauKAp89iWC7VvnigTWovQCievElCu83DnzJlduckQXkDAJ7pnzJjg+igFG8fPnGcZv0/om6i22N+2PVEKkbsgYsZKygj9Rgt0KGAQtVfdRU5gghBtKzi5WgP7MjFJGPNPYbdimvAo2VB6aTn0WU+3tF8sAHn5S62gTRSCOyig7sw5E54/WOhWjOaHZH2dEWBZ0rDUHlCnOVKS/nkjaYssy9KcnBCDI3qcZ7DSah7Ewob7N6yYjT/cwCT57vuzEF2LmYtZ9ECY+uPxh6JYQ/gWi2ksRIv565FGLOwVeDsZZraurimpBUBlcdT6EFuI9AFp0MvGyvRQDOOTQ7itfyVmqbb1v+799zS9xSMQlg8TxqzrXRfbk3Wv7rvjYYzBkX1RCRrsp50fgnMEhIjwFUuoTU4UQI9dU7KZRGgH2YNoPpegEmnmhAcGDnVvq6ei51ecJzRUEbcIJJlD9/+wNQ6TEzXBaI4qaU4qkjVxy9ubd5o5MLHYDkpWVjnKCmKVmMuUSKzlWmpuMe2Wgjji4IkwXE+kkDdVw="
+  - DOCKER_HUB_USERNAME=horia141
+  # DOCKER_HUB_PASSWORD
+  - secure: "jiaYFcVixq4WR3fScnIY0nFRoXqWLFUHvvHQOva42q832ncyflFKyiuWGEGVilHYoSucGEBtyjzJKGfEg/Wm4jyqM3yIEniUxsc0r63afomiiiZw6h4WwG/Y/IT8UXmDFqc/Ea4oR74yGhXiP4SXjbQQd8KtjjJ2zj8afeJPu1Vt3tSTiirlrcyv6zIY3d5Vlv5Cl/2nTKszCr4+oIaQx5cnSJ36gidVYO+WJ2Z3dJ3IR9V3+iLSyQfOp2Iv3fLiOtyMHyt8LE7CUdbhHdV6yPAFmWLa/cWpWENiAryKLabqsH2ImrjXLax7JQHWvZV8IFGksAy0c0ez52uyE0CGu7jWMtC2P2lpD4ys+YXlLzX27IucbUKinc4Q1xLCQJGPl23bVxOMDmcX96vODOXQHJnuWWryl5P7TvuIeFos9yY/R306f25U71cNO475sXNQIDCW1Ak82kF6RGOatjsg6TMD64WPXOSg/6I8aX62JjXTEWJodFXbeNKj/w1G7O07KpZuBOhiQb0q61CkOsEAU2b6gFLa+lKK5QurL5HNZDL5iwA7+kE+AevX210TbaV576UgR4SnFjQxcxO7RgdvB76zm5J6TtCfvzW2x4qDfglqYjXsVutMAgZfgL8QiJOpoKRxd+DzCujyQWl3w4R1pDLatg9wupKxYitJsyDUJE4="
 
 install:
 - npm install --registry=https://npm-proxy.fury.io/${GEMFURY_API_KEY}/${GEMFURY_USER}/ --progress=false
@@ -47,6 +53,11 @@ deploy:
 - provider: script
   skip_cleanup: true
   script: $(npm bin)/togemfury --user ${GEMFURY_USER} --api_key ${GEMFURY_API_KEY}
+  on:
+    tags: true
+- provider: script
+  skip_cleanup: true
+  script: docker build --tag base63/content:$TRAVIS_TAG . && docker tag base63/content:$TRAVIS_TAG base63/content:latest && docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD" && docker push base63/content:$TRAVIS_TAG && docker push base63/content:latest
   on:
     tags: true
 # - provider: heroku
