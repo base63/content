@@ -45,6 +45,7 @@ before_script:
 
 script:
 - npm run test
+- ls -lah
 
 after_success:
 - npm run push-coverage-to-codecov

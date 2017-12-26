@@ -20,7 +20,7 @@ ENV ADDRESS 0.0.0.0
 ENV PORT 10000
 ENV DATABASE_URL postgresql://base63:base63@base63-postgres:5432/base63
 ENV DATABASE_MIGRATIONS_DIR /base63/migrations
-ENV DATABASE_MIGRATIONS_TABLE migrations_contenty
+ENV DATABASE_MIGRATIONS_TABLE migrations_content
 ENV ORIGIN http://localhost:10001
 ENV CLIENTS http://localhost:10003,http://localhost:10004
 
